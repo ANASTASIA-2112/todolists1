@@ -1,8 +1,14 @@
 import React, {FC} from 'react';
+import TaskList from "./TaskList";
+import {FilterValuesType} from "./App";
+
 
 type TodoListPropsType = {
     title: string
     tasks: TaskType[]
+    changeFilterType : (filter:  FilterValuesType ) => void
+    removeTask: (taskId:number) => void
+
 }
 
 export type TaskType = {
@@ -11,31 +17,21 @@ export type TaskType = {
     isDone: boolean
 }
 
-const TodoList : FC <TodoListPropsType> = (props)=> {
-    let isAllTasksNotIsDone = true// все не выполнены
-    for (let i = 0; i < props.tasks.length; i++) {
-        if (props.tasks[i].isDone) {
-            isAllTasksNotIsDone = false
-            break;
-        }
-    }
-    const todoСlasses = isAllTasksNotIsDone ? "todolist-empty" : "todolist"
+const TodoList : FC <TodoListPropsType> = (props):JSX.Element=> {
+
     return (
-        <div className={todoСlasses }>
+        <div className={ "todolist"}>
             <h3>{props.title}</h3>
             <div>
                 <input/>
                 <button>+</button>
             </div>
-            <ul>
-                <li><input type="checkbox" checked={props.tasks[0].isDone}/> <span>{props.tasks[0].title}</span></li>
-                <li><input type="checkbox" checked={props.tasks[1].isDone}/> <span>{props.tasks[1].title}</span></li>
-                <li><input type="checkbox" checked={props.tasks[2].isDone}/> <span>{props.tasks[2].title}</span></li>
-            </ul>
+
+           <TaskList tasks={props.tasks}removeTask={props.removeTask}/>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={()=>props.changeFilterType("All")}>All</button>
+                <button onClick={()=>props.changeFilterType("Active")}>Active </button>
+                <button onClick={()=>props.changeFilterType("Completed")}>Completed</button>
             </div>
         </div>
     );
